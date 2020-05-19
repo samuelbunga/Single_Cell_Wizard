@@ -1,25 +1,12 @@
-README
+Single Cell Wizard
 ================
 
-`{r setup, include=FALSE} knitr::opts_chunk$set(echo = TRUE)`
+<img src = "./img/bidmc_square.jpg" height="300" widht="400"></img>
 
-## R Markdown
+Hi, Welcome to Single Cell Wizard.
 
-This is an R Markdown document. Markdown is a simple formatting syntax
-for authoring HTML, PDF, and MS Word documents. For more details on
-using R Markdown see <http://rmarkdown.rstudio.com>.
+It is a comprehensive web tool which can process Single Cell RNA seq raw
+FASTQ reads and perform prediction of cell type annotation. Please visit
+[Single Cell Wizard](https://www.bhasinlab.us/scw_page/scwiz.php)
 
-When you click the **Knit** button a document will be generated that
-includes both content as well as the output of any embedded R code
-chunks within the document. You can embed an R code chunk like this:
-
-`{r cars} summary(cars)`
-
-## Including Plots
-
-You can also embed plots, for example:
-
-`{r pressure, echo=FALSE} plot(pressure)`
-
-Note that the `echo = FALSE` parameter was added to the code chunk to
-prevent printing of the R code that generated the plot.
+**Note:** This project is currently under development.
