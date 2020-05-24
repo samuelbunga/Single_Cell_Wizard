@@ -12,7 +12,7 @@ def filter_args(ARGS_hash):
     """ filters empty arguments and returns a dictionary with real values """
     filtered_map = {}
     for each_key in ARGS_hash:
-        if not ARGS_hash[each_key]:
+        if not ARGS_hash[each_key] or ARGS_hash[each_key] =='None':
             pass
         else:
             filtered_map[each_key] = ARGS_hash[each_key]
@@ -35,6 +35,8 @@ if __name__ == '__main__':
     PARSER = argparse.ArgumentParser(description='pass the options values from scwizard to append them into the '
                                                  'database')
     PARSER.add_argument('-i', '--infiles', dest='infiles', help='provide path to the input fastq files', required=True)
+    PARSER.add_argument('-o', '--output', dest='output_dir', help='provide path to the output directory', required=True)
+    PARSER.add_argument('-id', '--job-name', dest='job_name', help='provide a job name', required=True)
     PARSER.add_argument('-e', '--email', dest='email', help='provide your email', required=True)
     PARSER.add_argument('-sp', '--species', dest='species', help='provide a species name (mouse or human)', required=True)
     PARSER.add_argument('-p', '--protocol', dest='protocol', help='provide a protocol of the experiment', required=True)
@@ -49,24 +51,26 @@ if __name__ == '__main__':
     PARSER.add_argument('-umi', '--umi-len', dest='umi', help='provide UMI length for single-end fastqs', required=False)
     PARSER.add_argument('-min_cells', '--min-cells', dest='min_cells', help='provide min cells to be filtered during '
                                                                             'post-process', required=False)
-    PARSER.add_argument('-min_gene', '--min-gene', dest='min_genes', help='provide min gene to be filtered during '
+    PARSER.add_argument('-min_genes', '--min-gene', dest='min_genes', help='provide min gene to be filtered during '
                                                                           'post-process', required=False)
     ARGS = PARSER.parse_args()
     job_id = get_job_id()
     ARGS_HASH = {
         '-job': job_id,
-        '-i': ARGS.infiles,
-        '-e': ARGS.email,
+        '-id': ARGS.job_name,
+        '-out': ARGS.output_dir,
+        '-file': ARGS.infiles,
+        '-email': ARGS.email,
         '-sp': ARGS.species,
-        '-p': ARGS.protocol,
-        '-a': ARGS.aligner,
+        '-protocol': ARGS.protocol,
+        '-aligner': ARGS.aligner,
         '-qc': ARGS.qc,
-        '-ss': ARGS.sample_size,
-        '-pp': ARGS.post_process,
-        '-bc': ARGS.barcode,
+        '-sample_size': ARGS.sample_size,
+        '-post_process': ARGS.post_process,
+        '-bclen': ARGS.barcode,
         '-umi': ARGS.umi,
         '-min_cells': ARGS.min_cells,
         '-min_genes':  ARGS.min_genes,
     }
     FILTERED_ARGS = filter_args(ARGS_HASH)
-    write_to_file('database.txt', FILTERED_ARGS)
+    write_to_file('/home/ubuntu/pre_process/database/database.txt', FILTERED_ARGS)
