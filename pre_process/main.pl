@@ -41,7 +41,9 @@ Options:
 
 ";
 
-GetOptions (	"sp=s"		=> \my $species,    	#M or H
+GetOptions (	
+		"job=i"		=> \my $job_id,		#batch number
+		"sp=s"		=> \my $species,    	#M or H
               	"file=s"   	=> \my $data,      	#path to the file
               	"out=s"  	=> \my $name,		#name of the project
 		"protocol=s" 	=> \my $protocol,	#Protocol
@@ -113,7 +115,12 @@ GetOptions (	"sp=s"		=> \my $species,    	#M or H
 	unless($min_cells){
 		say "min cells not defined, default is 3";
 		$min_cells='3';
-		}	 
+		}
+
+	#attaching job id to the given job name
+	$id = join("_", $job_id, $id);
+        print($id);
+
 	if($protocol eq "10X" || $protocol eq "dropseq" || $protocol eq "celseq" || $protocol eq "10x"){
 
 		 $exe = `perl /home/ubuntu/pre_process/pre_process_10x.pl -file $data -sp $species -out $name -protocol $protocol -sample_size $sample_size -qc $qc -aligner $aligner -email $to_email -post_process $pp -id $id -min_genes $min_genes -min_cells $min_cells`;

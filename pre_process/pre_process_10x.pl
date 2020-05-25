@@ -41,8 +41,8 @@ GetOptions (	"sp=s" 		=> \my $species,    		#M or H
 	my $dir = $name;
 
 #Getting the file name
-	my $R1 = `cd $data && find -type f -iname "*R1*fastq*" -printf "%f"`;
-	my $R2 = `cd $data && find -type f -iname "*R2*fastq*" -printf "%f"`;
+	my $R1 = `cd $data && find -type f -iname "*1*fastq*" -printf "%f"`;
+	my $R2 = `cd $data && find -type f -iname "*2*fastq*" -printf "%f"`;
 	chomp $R1;
 	chomp $R2;
 

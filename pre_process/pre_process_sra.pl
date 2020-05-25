@@ -27,7 +27,9 @@ GetOptions (	"sp=s" 		=> \my $species,    	#M or H
 		"id=s"		=> \my $id,
 		"min_cells=i"	=> \my $min_cells,
 		"min_genes=i"	=> \my $min_genes,
-		)
+		"qc=s"		=> \my $qc,
+		
+	)
   or die("Error in command line arguments\n");
 
 my $sp = $species;
@@ -77,15 +79,22 @@ if($SRA =~ m/(\w+)(\.+)/){
 
 #Move the Barcode and UMI to header
 say "Moving the Barcode and UMI to the header";	
-`/usr/bin/perl  /home/ubuntu/pre_process/sra_cleaner.pl -file $wd/$SRA.fastq  -out $wd/$SRA.s1.qc.fastq -bclen $bc_len -umi $umi_len`;
+`/usr/bin/perl  /home/ubuntu/pre_process/demux.pl -file $wd/$SRA.fastq  -out $wd/$SRA.s1.qc.fastq -bclen $bc_len -umi $umi_len`;
 
 #Quality check using FastP
+if($qc == "yes"){
 say "Running Fastp to clean the fastq";
 my $fastp = `/home/ubuntu/anaconda3/bin/fastp  -i $wd/$SRA.s1.qc.fastq -o $wd/$SRA.clean.fastq`;
 
 #Remove the low quality reads
 say "Removing the low quality reads";
-`/usr/bin/perl /home/ubuntu/pre_process/clean_fastq.pl -file $wd/$SRA.clean.fastq -umi $umi_len -bc_len $bc_len -wd $wd -min_bc $sample_size`;  
+`/usr/bin/perl /home/ubuntu/pre_process/clean_fastq.pl -file $wd/$SRA.clean.fastq -umi $umi_len -bc_len $bc_len -wd $wd -min_bc $sample_size`;
+}
+else{
+say "Skipping QC";
+say "Removing the low quality reads";
+`/usr/bin/perl /home/ubuntu/pre_process/clean_fastq.pl -file $wd/$SRA.s1.qc.fastq -umi $umi_len -bc_len $bc_len -wd $wd -min_bc $sample_size`;
+}
 
 #------------------------------------ END OF QC ------------------------------------
 
