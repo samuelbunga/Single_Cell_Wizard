@@ -12,6 +12,14 @@ Author: Samuel Bunga
 """
 
 
+def _dict_to_list(Dict):
+    lst = []
+    for keys, values in zip(Dict.keys(), Dict.values()):
+        lst.append(keys)
+        lst.append(values)
+    return lst
+
+
 def _job_check(converted_dict, job_id):
     if int(converted_dict['-job']) in job_id:
         return True
@@ -30,10 +38,11 @@ def read_database(job_id):
             entry = lines.strip().split(" ")
             converted = _convert_dict(entry)
             job_check = _job_check(converted, job_id)
-            if job_check:
-                print('process fail, ID:', converted['-job'])
-            elif not job_check:
+            dict_to_list(converted)
+            if not job_check:
                 print("processing the file with job ID", converted['-job'])
+                cmd_str = " ".join(dict_to_list(converted))
+                os.system("/usr/bin/perl "+cmd_str)
                 job_id.append(int(converted['-job']))
     return job_id
 
@@ -46,4 +55,4 @@ if __name__ == '__main__':
             job_id = read_database(job_id)
         elif not job_id:
             read_database()
-        time.sleep(300)
+        time.sleep(30)
