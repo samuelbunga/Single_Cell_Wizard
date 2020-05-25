@@ -33,17 +33,20 @@ def _convert_dict(lst):
 
 
 def read_database(job_id):
-    with open("database.txt", 'r+') as fh:
-        for lines in fh:
-            entry = lines.strip().split(" ")
-            converted = _convert_dict(entry)
-            job_check = _job_check(converted, job_id)
-            dict_to_list(converted)
-            if not job_check:
-                print("processing the file with job ID", converted['-job'])
-                cmd_str = " ".join(dict_to_list(converted))
-                os.system("/usr/bin/perl "+cmd_str)
-                job_id.append(int(converted['-job']))
+    try:
+        with open("database.txt", 'r') as fh:
+            for lines in fh:
+                entry = lines.strip().split(" ")
+                converted = _convert_dict(entry)
+                job_check = _job_check(converted, job_id)
+                if not job_check:
+                    print("processing the file with job ID", converted['-job'])
+                    cmd_str = " ".join(_dict_to_list(converted))
+                    print("perl", cmd_str)
+                    os.system("/usr/bin/perl ../main.pl "+cmd_str)
+                    job_id.append(int(converted['-job']))
+    except:
+        pass
     return job_id
 
 
@@ -55,4 +58,4 @@ if __name__ == '__main__':
             job_id = read_database(job_id)
         elif not job_id:
             read_database()
-        time.sleep(30)
+        time.sleep(10)
