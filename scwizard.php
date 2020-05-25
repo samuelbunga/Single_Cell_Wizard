@@ -152,14 +152,14 @@
             echo '<script>alert("error! please give an email address to recieve the output.")</script>';
           }
        
-          #$_SESSION['jobName']	= $_POST['jobName'];
+          $_SESSION['jobName']	= $_POST['jobName'];
           $_SESSION['qc'] 	= $_POST['qc'];
           $_SESSION['pp']	= $_POST['pp'];
           $_SESSION['aligner']	= $_POST['aligner'];
           $_SESSION['protocol']	= $_POST['protocol'];
-          #$_SESSION['ssize']	= $_POST['ssize'];
+          $_SESSION['ssize']	= $_POST['ssize'];
           $_SESSION['species']	= $_POST['species'];
-          #$_SESSION['uemail']	= $_POST['uemail'];
+          $_SESSION['uemail']	= $_POST['uemail'];
           $currentDir 		= getcwd();
           $folderDir 	        = "/home/ubuntu/project/" . $_SESSION['jobName'];
         
@@ -213,11 +213,12 @@
                   			}			
                 		}
              		}
-        	}
+        	
         	
           $python = exec("nohup python3 /home/ubuntu/pre_process/database/database_helper.py -i " . $_SESSION['dir'] . " -id " . $_SESSION['jobName'] . " -p " . $_SESSION['protocol'] . " -o " . $folderDir . " -sp " . $_SESSION['species'] . " -bc " . $_SESSION['bclen'] . " -umi " . $_SESSION['umi'] . " -ss " . $_SESSION['ssize'] . " -e " . $_SESSION['uemail'] . " -a " . $_SESSION['aligner'] . " -pp " . $_SESSION['pp'] . " -min_cells " . $_SESSION['min_cells']. " -min_genes " . $_SESSION['min_genes'] ."&");
       
           session_destroy();
+		   }
     }
         ?>
   </div>
