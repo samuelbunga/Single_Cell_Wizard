@@ -14,6 +14,11 @@
     <body style="padding-top: 56px">
       <br />
       <br />
+      
+      <!-- Importing Sweet alert function for creating nice javascript alerts */ -->
+      <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+           
+
       <?php
         session_start();
         if(isset($_POST['reset'])||isset($_SESSION['pipe_done'])){
@@ -23,7 +28,7 @@
         $set = False; 
       ?>
       <fieldset class="field_set">
-        <form action="scwiz2.php" method = "post" enctype="multipart/form-data">
+        <form action="scwizard.php" method = "post" enctype="multipart/form-data">
           <div class="uemailcc">
             <label class="labell">Email: <font color="red">*</font></label>
             <input type="text" name="uemail" id="uemail" class="iii form-control">
@@ -213,7 +218,7 @@
               echo '<script>alert("Error! Please make sure to only upload 2 files - R1 and R2")</script>';
              }
             
-            if(!(preg_match('/.*[1-2]*fastq.gz/', $FileType) || preg_match('/.*[1-2]*fq.gz/', $FileType))){
+            if(!(preg_match('/.*[1-2].*fastq.gz/', $FileType) || preg_match('/.*[1-2].*fq.gz/', $FileType))){
               echo '<script>alert("Error! Please make sure uploaded fastq file ends with [fastq/fq].gz")</script>';
               $error = "quit";
              }
@@ -243,7 +248,11 @@
              		}
         	
           $python = exec("nohup python3 /home/ubuntu/pre_process/database/database_helper.py -i " . $_SESSION['dir'] . " -id " . $_SESSION['jobName'] . " -p " . $_SESSION['protocol'] . " -o " . $folderDir . " -sp " . $_SESSION['species'] . " -bc " . $_SESSION['bclen'] . " -umi " . $_SESSION['umi'] . " -ss " . $_SESSION['ssize'] . " -e " . $_SESSION['uemail'] . " -a " . $_SESSION['aligner'] . " -pp " . $_SESSION['pp'] . " -min_cells " . $_SESSION['min_cells']. " -min_genes " . $_SESSION['min_genes'] ."&");
-      
+
+          echo '<script>
+          	  swal("Job submitted!", "You will receive the output to your email once done.", "success");
+                </script>';
+
           session_destroy();
          }
      }
