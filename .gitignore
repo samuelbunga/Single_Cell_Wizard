@@ -1,6 +1,7 @@
 *.fastq
 *.sra
 *.idea/
+*.gitignore
 #Do not ignore the below items
 !*.py
 !*.pl
