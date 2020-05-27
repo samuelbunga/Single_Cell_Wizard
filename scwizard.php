@@ -151,6 +151,7 @@
             $error = "quit";
             echo '<script>alert("error! please give an email address to recieve the output.")</script>';
           }
+
        
           $_SESSION['jobName']	= $_POST['jobName'];
           $_SESSION['qc'] 	= $_POST['qc'];
@@ -181,16 +182,43 @@
         
           $TotalSize=0;
           $FCount = count($_FILES['upload']['name']);
+
+          /* Checking uploaded single-end fastq files */ 
+          if($_SESSION['protocol'] == 'SRA'){
+	    if($FCount != 1){
+               echo '<script>alert("Error! you are only supposed to upload only 1 single-end fastq file.")</script>';
+               $error = "quit";
+		}
+            else{
+              for($i=0; $i<$FCount; $i++){
+              $FileType = strtolower(pathinfo(basename($_FILES['upload']['name'][$i]),PATHINFO_BASENAME));
+              #echo '<script type="text/javascript">alert("'.$FileType.'");</script>';
+              
+              /* regex to check if the passed files have fastq/fq followed by gz extension */
+              if(!(preg_match('/.*fastq.gz/', $FileType) || preg_match('/.*fq.gz/', $FileType))){
+                echo '<script>alert("Error! Please make sure uploaded fastq file ends with [fastq/fq].gz")</script>';
+                $error = "quit";
+               }
+             }
+           }
+         } 
+
+          /* Checking uploaded pair-end fastq files */
+	  else{
           for($k=0; $k<$FCount; $k++){
             $TotalSize += $_FILES['upload']['size'][$k];
-            $FileType = strtolower(pathinfo(basename($_FILES['upload']['name'][$k]),PATHINFO_EXTENSION));
-              
-            if($FileType != "gz"){
-              echo '<script>alert("error! uploaded files should be in Gunzipped format.")</script>';
+            $FileType = strtolower(pathinfo(basename($_FILES['upload']['name'][$k]),PATHINFO_BASENAME)); 
+            /* Check if the number of files uploaded are 2 */
+            if($FCount != 2){
+              echo '<script>alert("Error! Please make sure to only upload 2 files - R1 and R2")</script>';
+             }
+            
+            if(!(preg_match('/.*[1-2]*fastq.gz/', $FileType) || preg_match('/.*[1-2]*fq.gz/', $FileType))){
+              echo '<script>alert("Error! Please make sure uploaded fastq file ends with [fastq/fq].gz")</script>';
               $error = "quit";
-        	}
-             } 
-        
+             }
+            } 
+           }
            $Converted_Size = ($TotalSize*0.000001)*(0.001);
            if($Converted_Size >= 10){
              echo '<script>alert("error! file is too large to process. Please make sure the file(s) are below 10Gb.")</script>';
@@ -214,12 +242,11 @@
                 		}
              		}
         	
-        	
           $python = exec("nohup python3 /home/ubuntu/pre_process/database/database_helper.py -i " . $_SESSION['dir'] . " -id " . $_SESSION['jobName'] . " -p " . $_SESSION['protocol'] . " -o " . $folderDir . " -sp " . $_SESSION['species'] . " -bc " . $_SESSION['bclen'] . " -umi " . $_SESSION['umi'] . " -ss " . $_SESSION['ssize'] . " -e " . $_SESSION['uemail'] . " -a " . $_SESSION['aligner'] . " -pp " . $_SESSION['pp'] . " -min_cells " . $_SESSION['min_cells']. " -min_genes " . $_SESSION['min_genes'] ."&");
       
           session_destroy();
-		   }
-    }
+         }
+     }
         ?>
   </div>
   </body>
