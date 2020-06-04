@@ -42,100 +42,95 @@ Options:
 ";
 
 GetOptions (	
-		"job=i"		=> \my $job_id,		#batch number
-		"sp=s"		=> \my $species,    	#M or H
-              	"file=s"   	=> \my $data,      	#path to the file
-              	"out=s"  	=> \my $name,		#name of the project
-		"protocol=s" 	=> \my $protocol,	#Protocol
-		"bclen=i"	=> \my $bc_len, 	#bc length
-		"sample_size=i" => \my $sample_size,	#sample size
-		"aligner=s"	=> \my $aligner,	#Aligner
-		"qc=s"		=> \my $qc,		#quality check
-		"umi=i"		=> \my $umi,		#UMI length
-		"min_bc=i"	=> \my $min_bc,		#Min reads/barcode
-		"email=s"       => \my $to_email,       #Receiver email
-		"post_process=s"=> \my $pp,		#post process
-		"min_genes=i"	=> \my $min_genes,	#min genes
-		"min_cells=i"	=> \my $min_cells,	#min cells
-		"id=s"		=> \my $id,		#Get the output name
-		"help" 		=> sub{pod2usage($usage);}
+	"job=i" => \my $job_id, # batch number
+	"sp=s" => \my $species, # M or H
+    "file=s" => \my $data, # path to the file
+	"out=s" => \my $name, # name of the project
+	"protocol=s" => \my $protocol, # Protocol
+	"bclen=i" => \my $bc_len, # bc length
+	"sample_size=i" => \my $sample_size, # sample size
+	"aligner=s" => \my $aligner, # Aligner
+	"qc=s" => \my $qc, # quality check
+	"umi=i" => \my $umi, # UMI length
+	"min_bc=i" => \my $min_bc, # Min reads/barcode
+	"email=s" => \my $to_email, # Receiver email
+	"post_process=s" => \my $pp, # post process
+	"min_genes=i" => \my $min_genes, # min genes
+	"min_cells=i" => \my $min_cells, # min cells
+	"id=s" => \my $id, # Get the output name
+	"help" => sub{pod2usage($usage);}
 	)   
-  	or die($usage);
+	or die($usage);
 
-	unless($data) { 
-		die "Provide a file to open";
-	}
+unless($data) { 
+	die "Provide a file to open";
+}
 
-	unless($species){
-		die "Please provide a species name";
-	}
-	unless($name){
-		die "Please give a name for the output";
-	}
-	unless($protocol){
-		die "Please provide protocol type";
-	}
-	
-	if($protocol eq "10x" || $protocol eq "10X" || $protocol eq "dropseq" || $protocol eq "celseq"){ 
+unless($species){
+	die "Please provide a species name";
+}
+unless($name){
+	die "Please give a name for the output";
+}
+unless($protocol){
+	die "Please provide protocol type";
+}
 
-		unless($sample_size){
-			die say"Please provide sample size!";
-		}
+if($protocol eq "10x" || $protocol eq "10X" || $protocol eq "dropseq" || $protocol eq "celseq"){ 
+	unless($sample_size){
+		die say"Please provide sample size!";
 	}
-	else{
-			
-	}
-	
-	if($protocol eq "SRA" || $protocol eq "sra"){
+}
+else{
 		
-		unless($bc_len){
-			die "Please provide barcode length for SRA";
-		}
-	}
-	else{
-		
-		}
+}
 
-	unless($qc){
-		say "Quality check has not been defined, proceeding with default (qc == yes)!";
-		$qc = "yes";
+if($protocol eq "SRA" || $protocol eq "sra"){
+	unless($bc_len){
+		die "Please provide barcode length for SRA";
 	}
-	unless($aligner){
-		say "Aligner has not been defined, proceeding with default (aligner == hisat2)!";
-		$aligner = "hisat2";
-	}
-	unless($pp){
-		say "Post process not defined, default is 'Yes'";
-		$pp = "yes";
-	}
-	unless($min_genes){
-		say "min genes not defined, default is 100";
-		$min_genes='100';
-		}
-	unless($min_cells){
-		say "min cells not defined, default is 3";
-		$min_cells='3';
-		}
-
-	#attaching job id to the given job name
-	$id = join("_", $job_id, $id);
-        
-
-	if($protocol eq "10Xv2" || $protocol eq "dropseq" || $protocol eq "celseq" || $protocol eq "10Xv3"){
-
-		 $exe = `perl /home/ubuntu/pre_process/pre_process_10x.pl -file $data -sp $species -out $name -protocol $protocol -sample_size $sample_size -qc $qc -aligner $aligner -email $to_email -post_process $pp -id $id -min_genes $min_genes -min_cells $min_cells`;
-	}
-	elsif($protocol eq "SRA" || $protocol eq "sra" || $protocol eq "fastq"){
+}
+else{
 	
-		unless($bc_len){
-			die "Program killed. No barcode length given\n $usage";
-			}
-		$exe = `perl /home/ubuntu/pre_process/pre_process_sra.pl -file $data -sp $species -out $name -protocol $protocol -bclen $bc_len -umi $umi -sample_size $sample_size -email $to_email -aligner $aligner -post_process $pp -id $id -min_cells $min_cells -min_genes $min_genes`;
+}
 
+unless($qc){
+	say "Quality check has not been defined, proceeding with default (qc == yes)!";
+	$qc = "yes";
+}
+unless($aligner){
+	say "Aligner has not been defined, proceeding with default (aligner == hisat2)!";
+	$aligner = "hisat2";
+}
+unless($pp){
+	say "Post process not defined, default is 'Yes'";
+	$pp = "yes";
+}
+unless($min_genes){
+	say "min genes not defined, default is 100";
+	$min_genes='100';
+	}
+unless($min_cells){
+	say "min cells not defined, default is 3";
+	$min_cells='3';
 	}
 
-	else{
-		die $usage;
-	}
+#attaching job id to the given job name
+$id = join("_", $job_id, $id);
+    
+
+if($protocol eq "10Xv2" || $protocol eq "dropseq" || $protocol eq "celseq" || $protocol eq "10Xv3"){
+	 $exe = `perl /home/ubuntu/pre_process/pre_process_10x.pl -file $data -sp $species -out $name -protocol $protocol -sample_size $sample_size -qc $qc -aligner $aligner -email $to_email -post_process $pp -id $id -min_genes $min_genes -min_cells $min_cells`;
+}
+elsif($protocol eq "SRA" || $protocol eq "sra" || $protocol eq "fastq"){
+	unless($bc_len){
+		die "Program killed. No barcode length given\n $usage";
+		}
+	$exe = `perl /home/ubuntu/pre_process/pre_process_sra.pl -file $data -sp $species -out $name -protocol $protocol -bclen $bc_len -umi $umi -sample_size $sample_size -email $to_email -aligner $aligner -post_process $pp -id $id -min_cells $min_cells -min_genes $min_genes`;
+
+}
+else{
+	die $usage;
+}
 
 
