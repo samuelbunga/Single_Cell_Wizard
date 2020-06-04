@@ -115,15 +115,15 @@ if __name__ == '__main__':
     try:
         # Get user input
         ARGS = get_input()
-    
+
+        # Make rnk and label_data dir for gseapy
+        make_dir(ARGS.outdir)
+
         # Define default scanpy settings
         sc_settings(ARGS.outdir)
 
         # Initiate logging
         start_logging(ARGS.outdir)
-    
-        # Make rnk and label_data dir for gseapy
-        make_dir(ARGS.outdir)
 
         # assigning values
         infile = ARGS.infile
