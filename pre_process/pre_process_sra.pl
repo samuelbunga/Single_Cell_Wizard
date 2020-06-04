@@ -16,8 +16,8 @@ Contact: bunga.s@husky.neu.edu
 
 GetOptions (
 	"sp=s" => \my $species,    	
-    "file=s" => \my $data,
-    "out=s" => \my $name,
+	"file=s" => \my $data,
+	"out=s" => \my $name,
 	"protocol=s" => \my $protocol,
 	"bclen=i" => \my $bc_len,
 	"umi=i" => \my $umi_len,
