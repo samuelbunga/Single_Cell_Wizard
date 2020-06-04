@@ -83,7 +83,7 @@ if($SRA =~ m/(\w+)(\.+)/){
 
 #Move the Barcode and UMI to header
 say "Moving the Barcode and UMI to the header";	
-`/usr/bin/perl  /home/ubuntu/pre_process/demux.pl -file $wd/$SRA.fastq  -out $wd/$SRA.s1.qc.fastq -bclen $bc_len -umi $umi_len`;
+`/usr/bin/perl  /home/ubuntu/scwizard_pipeline/pre_process/demux.pl -file $wd/$SRA.fastq  -out $wd/$SRA.s1.qc.fastq -bclen $bc_len -umi $umi_len`;
 
 #Quality check using FastP
 if($qc == "yes"){
@@ -91,12 +91,12 @@ if($qc == "yes"){
 	my $fastp = `/home/ubuntu/anaconda3/bin/fastp  -i $wd/$SRA.s1.qc.fastq -o $wd/$SRA.clean.fastq`;
 	#Remove the low quality reads
 	say "Removing the low quality reads";
-	`/usr/bin/perl /home/ubuntu/pre_process/clean_fastq.pl -file $wd/$SRA.clean.fastq -umi $umi_len -bc_len $bc_len -wd $wd -min_bc $sample_size`;
+	`/usr/bin/perl /home/ubuntu/scwizard_pipeline/pre_process/clean_fastq.pl -file $wd/$SRA.clean.fastq -umi $umi_len -bc_len $bc_len -wd $wd -min_bc $sample_size`;
 }
 else{
 	say "Skipping QC";
 	say "Removing the low quality reads";
-	`/usr/bin/perl /home/ubuntu/pre_process/clean_fastq.pl -file $wd/$SRA.s1.qc.fastq -umi $umi_len -bc_len $bc_len -wd $wd -min_bc $sample_size`;
+	`/usr/bin/perl /home/ubuntu/scwizard_pipeline/pre_process/clean_fastq.pl -file $wd/$SRA.s1.qc.fastq -umi $umi_len -bc_len $bc_len -wd $wd -min_bc $sample_size`;
 }
 
 #------------------------------------ END OF QC ------------------------------------
@@ -188,7 +188,7 @@ say "extracting the counts matrix";
 `/bin/gunzip $wd/counts.tsv.gz`;
 
 
-`/home/ubuntu/miniconda3/bin/R --no-save --no-restore --slave --args $wd/counts.tsv $wd/$id.markers.csv < /home/ubuntu/pre_process/remove_geneid.R`;
+`/home/ubuntu/miniconda3/bin/R --no-save --no-restore --slave --args $wd/counts.tsv $wd/$id.markers.csv < /home/ubuntu/scwizard_pipeline/pre_process/remove_geneid.R`;
 say "Done";
 
 if($pp eq "no"){
@@ -200,19 +200,19 @@ if($pp eq "no"){
 	my $new_file = "https://www.bhasinlab.us/scw_page/scw_out/".$id.".markers.csv.gz";
 
 	#Send email to the user
-	`/home/ubuntu/anaconda3/bin//python3 /home/ubuntu/pre_process/smtp_ssl.py -to $to_email -linkout $new_file`;
+	`/home/ubuntu/anaconda3/bin//python3 /home/ubuntu/scwizard_pipeline/pre_process/smtp_ssl.py -to $to_email -linkout $new_file`;
     `rm -rfv $wd`;
 }
 
 elsif($pp eq "yes"){ 
 	my $csv = $wd.$id.".markers.csv";
-	`mv $csv /home/ubuntu/project/temp/`;
+	`mv $csv /home/ubuntu/scwizard_pipeline/outputs/temp/`;
 	`rm -rf $wd*`;
-	`mv /home/ubuntu/project/temp/* $wd`;
+	`mv /home/ubuntu/scwizard_pipeline/outputs/temp/* $wd`;
 	`mkdir $wd/post_process_out`;
 
 	#post processing
-    `/home/ubuntu/miniconda3/bin//python3 /home/ubuntu/pre_process/post_process/scan.py -i $wd/$id.markers.csv -o $wd/post_process_out/ -sp $sp -mg $min_genes -mc $min_cells`;
+    `/home/ubuntu/miniconda3/bin//python3 /home/ubuntu/scwizard_pipeline/post_process/scanPy.py -i $wd/$id.markers.csv -o $wd/post_process_out/ -sp $sp -mg $min_genes -mc $min_cells`;
 
 	#gzip the markers file
 	#`cd $wd && /bin/gzip $id.markers.csv`;
@@ -224,7 +224,7 @@ elsif($pp eq "yes"){
 
 	#Send email to the user
 	my $new_file = "https://www.bhasinlab.us/scw_page/scw_out/".$id.".out.tar.gz";
-	`/home/ubuntu/anaconda3/bin//python3 /home/ubuntu/pre_process/smtp_ssl.py -to $to_email -linkout $new_file`;
+	`/home/ubuntu/anaconda3/bin//python3 /home/ubuntu/scwizard_pipeline/pre_process/smtp_ssl.py -to $to_email -linkout $new_file`;
 
 	#Delete the files
 	`rm -rfv $wd`;

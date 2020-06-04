@@ -201,7 +201,7 @@ say "Done";
 
 say "extracting the counts matrix";
 `/bin/gunzip $wd/counts.tsv.gz`;
-`/home/ubuntu/miniconda3/bin/R --no-save --no-restore --slave --args $wd/counts.tsv $wd/$id.markers.csv < /home/ubuntu/pre_process/remove_geneid.R`;
+`/home/ubuntu/miniconda3/bin/R --no-save --no-restore --slave --args $wd/counts.tsv $wd/$id.markers.csv < /home/ubuntu/scwizard_pipeline/pre_process/remove_geneid.R`;
 
 if($pp eq "no"){
 	#gzip the file
@@ -210,19 +210,19 @@ if($pp eq "no"){
 	`mv $wd/$id.markers.csv.gz /var/www/html/scw_page/scw_out/`;
 	my $new_file = "https://www.bhasinlab.us/scw_page/scw_out/".$id.".markers.csv.gz";
 	#Send email to the user
-	`/home/ubuntu/anaconda3/bin//python3 /home/ubuntu/pre_process/smtp_ssl.py -to $to_email -linkout $new_file`;
+	`/home/ubuntu/anaconda3/bin//python3 /home/ubuntu/scwizard_pipeline/pre_process/smtp_ssl.py -to $to_email -linkout $new_file`;
 	`rm -rfv $wd`;
 }
 
 elsif($pp eq "yes"){
 	my $csv = $wd.$id.".markers.csv";
-	`mv $csv /home/ubuntu/project/temp/`;
+	`mv $csv /home/ubuntu/scwizard_pipeline/outputs/temp/`;
 	`rm -rf $wd*`;
-	`mv /home/ubuntu/project/temp/* $wd`;
+	`mv /home/ubuntu/scwizard_pipeline/outputs/temp/* $wd`;
 	`mkdir $wd/post_process_out`;
 
 	#post processing
-	`/home/ubuntu/miniconda3/bin//python3 /home/ubuntu/pre_process/post_process/scanPy.py -i $wd/$id.markers.csv -o $wd/post_process_out/ -sp $sp -mg $min_genes -mc $min_cells`;
+	`/home/ubuntu/miniconda3/bin//python3 /home/ubuntu/scwizard_pipeline/post_process/scanPy.py -i $wd/$id.markers.csv -o $wd/post_process_out/ -sp $sp -mg $min_genes -mc $min_cells`;
 
 	#gzip the markers file
 	`/bin/gzip $wd/$id.markers.csv`;
@@ -233,7 +233,7 @@ elsif($pp eq "yes"){
 
 	#Send email to the user
 	my $new_file = "https://www.bhasinlab.us/scw_page/scw_out/".$id.".out.tar.gz";
-	`/home/ubuntu/anaconda3/bin//python3 /home/ubuntu/pre_process/smtp_ssl.py -to $to_email -linkout $new_file`;
+	`/home/ubuntu/anaconda3/bin//python3 /home/ubuntu/scwizard_pipeline/pre_process/smtp_ssl.py -to $to_email -linkout $new_file`;
 
 	#Delete the files
 	`rm -rfv $wd`;

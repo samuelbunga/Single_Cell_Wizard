@@ -258,7 +258,6 @@
              echo '<script>alert("Error! file is too large to process. Please make sure the file(s) are below 10Gb.")</script>';
              $error = "quit";
             }
-
 	   if($error == "quit"){
              echo '<script>alert("Please review the errors and try again.")</script>';
             }

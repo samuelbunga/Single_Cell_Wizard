@@ -18,7 +18,7 @@ args            = parser.parse_args()
 port = 465  # For SSL
 sender_email = "scwiz.tool@gmail.com"  # Enter your address
 receiver_email = args.to  # Enter receiver address
-password = 'Scwiz4444'
+password = ''
 subject = "Job Completed"
 body = "Please open the link below to download your results. \n"+args.linkout+"\n"+"Your link to the results will be expired in 24Hrs.\n"+"For any questions and inquiries, contact: help.scwiz.tool@gmail.com"
 
