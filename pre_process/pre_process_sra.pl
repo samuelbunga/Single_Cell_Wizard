@@ -209,13 +209,9 @@ elsif($pp eq "yes"){
 	`mv $csv /home/ubuntu/scwizard_pipeline/outputs/temp/`;
 	`rm -rf $wd*`;
 	`mv /home/ubuntu/scwizard_pipeline/outputs/temp/* $wd`;
-	`mkdir $wd/post_process_out`;
 
 	#post processing
     `/home/ubuntu/miniconda3/bin//python3 /home/ubuntu/scwizard_pipeline/post_process/scanPy.py -i $wd/$id.markers.csv -o $wd/post_process_out/ -sp $sp -mg $min_genes -mc $min_cells`;
-
-	#gzip the markers file
-	#`cd $wd && /bin/gzip $id.markers.csv`;
 
 	#gzip the working directory
 	`cd $wd && /bin/tar -czf $id.out.tar.gz * `;
@@ -231,3 +227,4 @@ elsif($pp eq "yes"){
 }
 
 #------------------------------------ END OF PROGRAM ------------------------------------
+
