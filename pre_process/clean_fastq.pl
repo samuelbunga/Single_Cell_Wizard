@@ -4,12 +4,13 @@ use strict;
 use feature qw(say);
 use Getopt::Long;
 
-GetOptions ( "file=s"		=> \my $infile,
-	     "umi=i"		=> \my $umi,
-	     "bc_len=i"		=> \my $bc_len,
-	     "wd=s"		=> \my $wd,
- 	     "min_bc=i"		=> \my $min_bc,
-	   )
+GetOptions ( 
+	"file=s" => \my $infile,
+	"umi=i" => \my $umi,
+	"bc_len=i" => \my $bc_len,
+	"wd=s" => \my $wd,
+	"min_bc=i" => \my $min_bc,
+)
 
 or die("Error please provide arguments\n");
 my $infh;
@@ -34,18 +35,12 @@ while(<$infh>){
 }
 close $infh;
 
-#Get the name of the file
-#if($barcodes =~ /(\w.*\/)(\w.*)/ ){
-#        $bc_file = $2;
-#        }
-
-
 #Full path to the barcodes file
 $bc_file = $barcodes;
 $out_r	 = join("/",$wd, "filtered_bc.txt");
 
 #Run the r_sra_wrapper script to get the filtered barcodes
-`/home/ubuntu/anaconda3/bin//R --no-save --no-restore --slave --args $bc_file $out_r $min_bc < /home/ubuntu/pre_process/r_sra_wrapper.R`;
+`/home/ubuntu/anaconda3/bin//R --no-save --no-restore --slave --args $bc_file $out_r $min_bc < /home/ubuntu/scwizard_pipeline/pre_process/r_sra_wrapper.R`;
 
 
 #Open the filtered barcodes file and push them to an array

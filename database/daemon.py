@@ -43,7 +43,7 @@ def read_database(job_id):
                     print("processing the file with job ID", converted['-job'])
                     cmd_str = " ".join(_dict_to_list(converted))
                     print("perl", cmd_str)
-                    os.system("/usr/bin/perl ../main.pl "+cmd_str)
+                    os.system("/usr/bin/perl /home/ubuntu/scwizard_pipeline/pre_process/main.pl "+cmd_str)
                     job_id.append(int(converted['-job']))
     except:
         pass

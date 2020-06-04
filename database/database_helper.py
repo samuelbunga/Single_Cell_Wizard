@@ -73,4 +73,4 @@ if __name__ == '__main__':
         '-min_genes':  ARGS.min_genes,
     }
     FILTERED_ARGS = filter_args(ARGS_HASH)
-    write_to_file('/home/ubuntu/pre_process/database/database.txt', FILTERED_ARGS)
+    write_to_file('/home/ubuntu/scwizard_pipeline/database/database.txt', FILTERED_ARGS)

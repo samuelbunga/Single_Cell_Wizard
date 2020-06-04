@@ -120,13 +120,13 @@ $id = join("_", $job_id, $id);
     
 
 if($protocol eq "10Xv2" || $protocol eq "dropseq" || $protocol eq "celseq" || $protocol eq "10Xv3"){
-	 $exe = `perl /home/ubuntu/pre_process/pre_process_10x.pl -file $data -sp $species -out $name -protocol $protocol -sample_size $sample_size -qc $qc -aligner $aligner -email $to_email -post_process $pp -id $id -min_genes $min_genes -min_cells $min_cells`;
+	 $exe = `perl /home/ubuntu/scwizard_pipeline/pre_process/pre_process_10x.pl -file $data -sp $species -out $name -protocol $protocol -sample_size $sample_size -qc $qc -aligner $aligner -email $to_email -post_process $pp -id $id -min_genes $min_genes -min_cells $min_cells`;
 }
 elsif($protocol eq "SRA" || $protocol eq "sra" || $protocol eq "fastq"){
 	unless($bc_len){
 		die "Program killed. No barcode length given\n $usage";
 		}
-	$exe = `perl /home/ubuntu/pre_process/pre_process_sra.pl -file $data -sp $species -out $name -protocol $protocol -bclen $bc_len -umi $umi -sample_size $sample_size -email $to_email -aligner $aligner -post_process $pp -id $id -min_cells $min_cells -min_genes $min_genes`;
+	$exe = `perl /home/ubuntu/scwizard_pipeline/pre_process/pre_process_sra.pl -file $data -sp $species -out $name -protocol $protocol -bclen $bc_len -umi $umi -sample_size $sample_size -email $to_email -aligner $aligner -post_process $pp -id $id -min_cells $min_cells -min_genes $min_genes`;
 
 }
 else{

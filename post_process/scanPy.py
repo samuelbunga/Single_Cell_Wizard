@@ -71,7 +71,7 @@ def make_rnk(adata, outdir, species):
 
         # Annotate each cluster
         try:
-            gseapy.prerank(outdir + '/rnk/' + str(count) + '.rnk', 'Database/'+ species + ".gmt",
+            gseapy.prerank(outdir + '/rnk/' + str(count) + '.rnk', '/home/ubuntu/scwizard_pipeline/post_process/Database/'+ species + ".gmt",
                            outdir + '/label_data/' + str(count) + '_folder')
         except:
             pass
