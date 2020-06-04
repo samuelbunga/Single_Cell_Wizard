@@ -58,4 +58,4 @@ if __name__ == '__main__':
             job_id = read_database(job_id)
         elif not job_id:
             read_database()
-        time.sleep(10)
+        time.sleep(300)

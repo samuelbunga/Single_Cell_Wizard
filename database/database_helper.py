@@ -12,7 +12,7 @@ def filter_args(ARGS_hash):
     """ filters empty arguments and returns a dictionary with real values """
     filtered_map = {}
     for each_key in ARGS_hash:
-        if not ARGS_hash[each_key] or ARGS_hash[each_key] =='None':
+        if not ARGS_hash[each_key] or ARGS_hash[each_key]=='None':
             pass
         else:
             filtered_map[each_key] = ARGS_hash[each_key]
